@@ -1,0 +1,96 @@
+LOGICAI — COMPLETE INNOVATION DEMO (WINDOWS CMD)
+
+1. Open this folder in VS Code.
+2. In terminal, run:
+   py -m venv .venv
+   .venv\Scripts\activate.bat
+   python -m pip install -r requirements.txt
+3. Run automated checks:
+   test_demo.bat
+   (Runs 18+ unit tests and the synthetic triage smoke evaluation.)
+4. Start the isolated demo:
+   run_demo.bat
+   (First run creates demo_logicai.db automatically.)
+5. Open http://127.0.0.1:5000
+
+DEMO CREDENTIALS
+Admin:       admin.demo@logicai.local / AdminDemo123!
+Raiser 1:    raiser1@logicai.demo / RaiserDemo123!
+Raiser 2:    raiser2@logicai.demo / RaiserDemo123!
+Raiser 3:    raiser3@logicai.demo / RaiserDemo123!
+Network 1:   network1@logicai.demo / WorkerDemo123!
+Network 2:   network2@logicai.demo / WorkerDemo123!
+Software 1:  software1@logicai.demo / WorkerDemo123!
+Software 2:  software2@logicai.demo / WorkerDemo123!
+Hardware:    hardware1@logicai.demo / WorkerDemo123!
+Electrical:  electrical1@logicai.demo / WorkerDemo123!
+Maintenance: maintenance1@logicai.demo / WorkerDemo123!
+All worker accounts use WorkerDemo123!; raisers use RaiserDemo123!.
+
+FEATURE TESTS
+A. Major incident clustering:
+   Submit a Networking complaint with title "Wi-Fi not working in Block B"
+   and description "Campus Wi-Fi is not working in Block B and students
+   cannot access the internet." Compare the incident ID and related tickets.
+   Ticket records remain separate. Matching is lexical and same-category only.
+
+B. Fair worker assignment:
+   Submit a new Networking or Software complaint. The scheduler:
+   - keeps assignment within the complaint department;
+   - excludes Unavailable workers;
+   - prefers Available workers over Busy workers;
+   - prefers the strongest skill match when skills are entered;
+   - then balances active workload and 30-day assignment counts;
+   - breaks remaining ties by least-recently-assigned time.
+   For a direct fairness test, set both workers in the same department to
+   Available and give them matching skills. Submit at least four similar
+   complaints one at a time. Inspect each ticket's Assignment history and the
+   Admin worker workload table. Then mark one worker Unavailable and verify
+   that new tickets are not assigned to them.
+
+C. Resolution estimate:
+   Open a newly submitted ticket. The estimate uses historical median
+   completion duration (category+priority when at least two examples exist,
+   otherwise category, overall history, then a labelled 24-hour cold start).
+   Priority and current worker load adjust the estimate. It is a statistical
+   baseline, not a separately trained ML model.
+
+D. Classification / priority:
+   Submit "ERP application crashes during login" and
+   "Power fluctuation in classroom". Then submit an ambiguous issue to check
+   the Admin Review queue. Classification is rule/keyword based.
+
+E. Knowledge retrieval:
+   Open a complaint in a category with seeded knowledge articles. Review the
+   similar article, cause and solution. Only Completed tickets can add/update
+   knowledge articles; try to call the service with a Resolved ticket in tests.
+
+F. Full lifecycle:
+   Worker: Open -> Seen -> Checked -> In Progress -> Resolved -> Completed.
+   The app rejects skipping steps or moving backwards. Add cause and verified
+   resolution. Completed requires a verified resolution. Raiser can submit
+   feedback after resolution.
+
+G. Attachments:
+   Upload a supported text, log, CSV, Markdown, PDF or image file. The file is
+   stored and authorized ticket viewers can download it. PDF/image text
+   extraction depends on optional local libraries and Tesseract installation.
+
+H. Admin:
+   Inspect analytics, incidents, worker availability/skills, active workload,
+   recent assignment counts, performance, overdue items, reports, feedback and
+   the low-confidence review queue.
+
+RESET DEMO DATA
+Stop the app, then run:
+   .venv\Scripts\python.exe seed_demo.py --reset
+Restart with run_demo.bat.
+
+IMPORTANT LIMITATIONS
+Demo data is synthetic. This app uses demo_logicai.db, not logicai.db.
+Your existing real database is not overwritten. NLP classification is
+rule-based; duplicate matching is lexical; knowledge retrieval is similarity
+ranking rather than generative RAG; ETA is a statistical baseline. The 100%
+classification result from evaluate_logicai.py is on a small synthetic sample
+only and is not real-world accuracy. Full browser/integration and production
+security testing must still be performed before deployment.

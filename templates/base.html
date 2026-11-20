@@ -1,0 +1,7 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}LogicAI{% endblock %}</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body><nav class="nav"><a class="brand" href="{{ url_for('index') }}">◈ LogicAI</a><div class="navlinks">
+{% if current_user %}<a href="{{ url_for('dashboard') }}">Dashboard</a>{% if current_role=='user' %}<a href="{{ url_for('new_ticket') }}">New ticket</a>{% endif %}{% if current_role=='admin' %}<a href="{{ url_for('knowledge') }}">Knowledge base</a>{% endif %}<span class="user">{{ current_user }}</span><form method="post" action="{{ url_for('logout') }}" class="nav-logout"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button type="submit" class="nav-logout-button">Logout</button></form>
+{% else %}<a href="{{ url_for('login') }}">Sign in</a><a class="nav-cta" href="{{ url_for('register') }}">Get started</a>{% endif %}</div></nav>
+<main class="container">{% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}{% block content %}{% endblock %}</main>
+<footer>LogicAI · Intelligent IT support workflow · Prototype</footer></body></html>

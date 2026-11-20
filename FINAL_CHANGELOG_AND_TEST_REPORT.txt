@@ -1,0 +1,27 @@
+LOGICAI — CORRECTED PROJECT BUILD
+
+What was changed in this build
+1. Added session-based CSRF protection for all POST requests. All existing POST forms now include the CSRF token.
+2. Changed logout from GET to POST and updated the navigation control.
+3. Removed public email-only administrator registration. Admin registration now requires ADMIN_REGISTRATION_CODE set privately in the environment.
+4. Restricted worker status changes to tickets assigned to that worker. Workers can still view their department queue.
+5. Added safe validation for non-numeric feedback ratings (returns a controlled 400 instead of a server exception).
+6. Hid the New Ticket navigation link from Admin and Worker roles.
+7. Changed AI category keyword matching to use word boundaries and normalized Wi-Fi spelling to reduce substring false positives (for example, “program” should not match “ram”).
+8. Increased SQLite connection timeout and enabled busy timeout/WAL for better concurrent access behavior.
+9. Changed live polling so it no longer reloads the whole page and destroys unsaved form input; it shows a refresh notice instead.
+10. Added README security setup notes.
+
+Automated verification
+- Python syntax compilation: passed for app.py, database.py, services/ai_engine.py, services/assignment.py.
+- Unit tests: 18/18 passed using `python -m unittest discover -s tests -v`.
+- Flask route/browser smoke test: NOT RUN in the packaging environment because Flask is not installed in that environment. Install requirements.txt and run the application locally to verify the full UI and role workflows.
+- Playwright/browser end-to-end tests: NOT RUN.
+- Real-world AI accuracy: NOT established. Existing classifier tests are synthetic/unit tests only.
+
+Important setup
+- Install dependencies: py -m pip install -r requirements.txt
+- Start: run_demo.bat (after creating .venv as described in README).
+- For first Admin account, set ADMIN_REGISTRATION_CODE to a private value before launching, register the Admin, then remove the variable.
+- Set a private SECRET_KEY for any non-disposable environment.
+- This is a hackathon prototype, not a production security certification. Review hosting, backups, file validation, rate limiting, and real-world AI evaluation before deployment.
